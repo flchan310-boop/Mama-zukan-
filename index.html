@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta name="theme-color" content="#151515" />
+  <title>ママ図鑑</title>
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div>
+      <h1>ママ図鑑</h1>
+      <p>ローカルファースト設定管理</p>
+    </div>
+    <button id="newCharacterBtn" class="primary">＋ 新規</button>
+  </header>
+
+  <main class="layout">
+    <aside class="sidebar">
+      <div class="search-wrap"><input id="searchInput" placeholder="名前・タグ・設定を検索" /></div>
+      <div id="characterList" class="character-list"></div>
+      <div class="sidebar-actions">
+        <button id="exportBtn">JSON書き出し</button>
+        <label class="button-like">JSON読込<input id="importInput" type="file" accept="application/json" hidden /></label>
+      </div>
+    </aside>
+
+    <section class="content">
+      <div id="emptyState" class="empty-state">
+        <div class="empty-icon">✦</div>
+        <h2>まだ登録がありません</h2>
+        <p>「＋ 新規」から最初の人物を追加してください。</p>
+      </div>
+
+      <article id="editor" class="editor hidden">
+        <div class="hero">
+          <div class="hero-text">
+            <input id="nameInput" class="title-input" placeholder="名前" />
+            <input id="subtitleInput" class="subtitle-input" placeholder="立場・呼称など" />
+            <input id="tagsInput" class="tags-input" placeholder="タグ（カンマ区切り）" />
+          </div>
+          <div class="hero-actions">
+            <button id="copyBtn">完全設定をコピー</button>
+            <button id="deleteBtn" class="danger">削除</button>
+          </div>
+        </div>
+
+        <nav class="tabs" id="tabs"></nav>
+        <section id="tabPanel" class="tab-panel"></section>
+
+        <section class="gallery-section">
+          <div class="section-head">
+            <h3>基準画像・ギャラリー</h3>
+            <label class="button-like">＋画像追加<input id="imageInput" type="file" accept="image/*" multiple hidden /></label>
+          </div>
+          <div id="gallery" class="gallery"></div>
+        </section>
+
+        <section class="history-section">
+          <div class="section-head"><h3>更新履歴</h3><button id="clearHistoryBtn">履歴を整理</button></div>
+          <div id="history" class="history"></div>
+        </section>
+
+        <div class="savebar">
+          <span id="saveStatus">保存済み</span>
+          <button id="saveBtn" class="primary">保存</button>
+        </div>
+      </article>
+    </section>
+  </main>
+
+  <dialog id="newDialog">
+    <form method="dialog" id="newForm">
+      <h2>新しい人物</h2>
+      <label>名前<input id="newName" required /></label>
+      <label>立場・呼称<input id="newSubtitle" /></label>
+      <div class="dialog-actions"><button value="cancel">キャンセル</button><button id="createBtn" value="default" class="primary">作成</button></div>
+    </form>
+  </dialog>
+
+  <template id="textSectionTemplate">
+    <div class="field-card">
+      <textarea class="section-text" spellcheck="false"></textarea>
+    </div>
+  </template>
+
+  <script src="app.js"></script>
+</body>
+</html>

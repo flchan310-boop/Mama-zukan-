@@ -1,0 +1,10 @@
+{
+  "name":"ママ図鑑",
+  "short_name":"ママ図鑑",
+  "start_url":"./",
+  "display":"standalone",
+  "background_color":"#0f0f10",
+  "theme_color":"#151515",
+  "lang":"ja",
+  "icons":[]
+}
