@@ -10,18 +10,23 @@
 </head>
 <body>
   <header class="topbar">
-    <div>
-      <h1>ママ図鑑</h1>
-      <p>ローカルファースト設定管理</p>
-    </div>
-    <button id="newCharacterBtn" class="primary">＋ 新規</button>
+    <div><h1>ママ図鑑</h1><p>ローカルファースト完全復元版</p></div>
+    <button id="newBtn" class="primary">＋ 新規</button>
   </header>
+
+  <nav class="mode-tabs" id="modeTabs">
+    <button data-mode="characters" class="active">キャラクター</button>
+    <button data-mode="common">共通設定</button>
+    <button data-mode="personas">人格設定</button>
+  </nav>
 
   <main class="layout">
     <aside class="sidebar">
       <div class="search-wrap"><input id="searchInput" placeholder="名前・タグ・設定を検索" /></div>
-      <div id="characterList" class="character-list"></div>
+      <div id="sideList" class="character-list"></div>
       <div class="sidebar-actions">
+        <button id="pasteImportBtn" class="accent-outline">設定貼り付け</button>
+        <button id="copyFullBtn" class="accent-outline">完全復元文をコピー</button>
         <button id="exportBtn">JSON書き出し</button>
         <label class="button-like">JSON読込<input id="importInput" type="file" accept="application/json" hidden /></label>
       </div>
@@ -29,63 +34,48 @@
 
     <section class="content">
       <div id="emptyState" class="empty-state">
-        <div class="empty-icon">✦</div>
-        <h2>まだ登録がありません</h2>
-        <p>「＋ 新規」から最初の人物を追加してください。</p>
+        <div class="empty-icon">✦</div><h2>項目を選んでください</h2><p>キャラクター・共通設定・人格設定をまとめて保存できます。</p>
       </div>
 
-      <article id="editor" class="editor hidden">
+      <article id="characterEditor" class="editor hidden">
         <div class="hero">
           <div class="hero-text">
-            <input id="nameInput" class="title-input" placeholder="名前" />
-            <input id="subtitleInput" class="subtitle-input" placeholder="立場・呼称など" />
-            <input id="tagsInput" class="tags-input" placeholder="タグ（カンマ区切り）" />
+            <input id="charName" class="title-input" placeholder="名前" />
+            <input id="charSubtitle" class="subtitle-input" placeholder="立場・呼称など" />
+            <input id="charTags" class="tags-input" placeholder="タグ（カンマ区切り）" />
           </div>
-          <div class="hero-actions">
-            <button id="copyBtn">完全設定をコピー</button>
-            <button id="deleteBtn" class="danger">削除</button>
-          </div>
+          <div class="hero-actions"><button id="copyCharBtn">人物設定をコピー</button><button id="deleteCharBtn" class="danger">削除</button></div>
         </div>
+        <nav class="tabs" id="charTabs"></nav><section id="charPanel" class="tab-panel"></section>
+        <section class="gallery-section"><div class="section-head"><h3>基準画像・ギャラリー</h3><label class="button-like">＋画像追加<input id="imageInput" type="file" accept="image/*" multiple hidden /></label></div><div id="gallery" class="gallery"></div></section>
+        <section class="history-section"><div class="section-head"><h3>更新履歴</h3><button id="clearCharHistory">履歴を整理</button></div><div id="charHistory" class="history"></div></section>
+        <div class="savebar"><span id="charStatus">保存済み</span><button id="saveCharBtn" class="primary">保存</button></div>
+      </article>
 
-        <nav class="tabs" id="tabs"></nav>
-        <section id="tabPanel" class="tab-panel"></section>
+      <article id="commonEditor" class="editor hidden">
+        <div class="hero"><div class="hero-text"><h2 class="static-title">共通設定</h2><p class="muted">ママ世界全体・人格境界・画像生成・親密シーンなど、人物をまたぐルール。</p></div><div class="hero-actions"><button id="copyCommonBtn">共通設定をコピー</button></div></div>
+        <nav class="tabs" id="commonTabs"></nav><section id="commonPanel" class="tab-panel"></section>
+        <section class="history-section"><div class="section-head"><h3>更新履歴</h3><button id="clearCommonHistory">履歴を整理</button></div><div id="commonHistory" class="history"></div></section>
+        <div class="savebar"><span id="commonStatus">保存済み</span><button id="saveCommonBtn" class="primary">保存</button></div>
+      </article>
 
-        <section class="gallery-section">
-          <div class="section-head">
-            <h3>基準画像・ギャラリー</h3>
-            <label class="button-like">＋画像追加<input id="imageInput" type="file" accept="image/*" multiple hidden /></label>
-          </div>
-          <div id="gallery" class="gallery"></div>
-        </section>
-
-        <section class="history-section">
-          <div class="section-head"><h3>更新履歴</h3><button id="clearHistoryBtn">履歴を整理</button></div>
-          <div id="history" class="history"></div>
-        </section>
-
-        <div class="savebar">
-          <span id="saveStatus">保存済み</span>
-          <button id="saveBtn" class="primary">保存</button>
+      <article id="personaEditor" class="editor hidden">
+        <div class="hero">
+          <div class="hero-text"><input id="personaName" class="title-input" placeholder="人格名" /><input id="personaSubtitle" class="subtitle-input" placeholder="役割・呼称など" /><input id="personaTags" class="tags-input" placeholder="タグ（カンマ区切り）" /></div>
+          <div class="hero-actions"><button id="copyPersonaBtn">人格設定をコピー</button><button id="deletePersonaBtn" class="danger">削除</button></div>
         </div>
+        <nav class="tabs" id="personaTabs"></nav><section id="personaPanel" class="tab-panel"></section>
+        <section class="history-section"><div class="section-head"><h3>更新履歴</h3><button id="clearPersonaHistory">履歴を整理</button></div><div id="personaHistory" class="history"></div></section>
+        <div class="savebar"><span id="personaStatus">保存済み</span><button id="savePersonaBtn" class="primary">保存</button></div>
       </article>
     </section>
   </main>
 
-  <dialog id="newDialog">
-    <form method="dialog" id="newForm">
-      <h2>新しい人物</h2>
-      <label>名前<input id="newName" required /></label>
-      <label>立場・呼称<input id="newSubtitle" /></label>
-      <div class="dialog-actions"><button value="cancel">キャンセル</button><button id="createBtn" value="default" class="primary">作成</button></div>
-    </form>
-  </dialog>
+  <dialog id="newDialog"><form method="dialog" id="newForm"><h2 id="newDialogTitle">新規作成</h2><label>名前<input id="newName" required /></label><label>立場・役割<input id="newSubtitle" /></label><div class="dialog-actions"><button value="cancel">キャンセル</button><button id="createBtn" value="default" class="primary">作成</button></div></form></dialog>
 
-  <template id="textSectionTemplate">
-    <div class="field-card">
-      <textarea class="section-text" spellcheck="false"></textarea>
-    </div>
-  </template>
+  <dialog id="pasteDialog" class="paste-dialog"><form method="dialog"><h2>設定を貼り付けて読込</h2><p class="dialog-help">ChatGPTから受け取ったJSONをそのまま貼り付けできます。キャラ・共通設定・人格設定・完全バックアップに対応します。</p><textarea id="pasteInput" class="paste-input" spellcheck="false" placeholder='{"version":3,"characters":[],"commonSettings":{},"personas":[]}'></textarea><div class="paste-tools"><button type="button" id="copySchemaBtn">ChatGPT用の形式をコピー</button><button type="button" id="clearPasteBtn">クリア</button></div><div class="dialog-actions"><button value="cancel">キャンセル</button><button type="button" id="pasteApplyBtn" class="primary">読み込む</button></div></form></dialog>
 
+  <template id="textSectionTemplate"><div class="field-card"><textarea class="section-text" spellcheck="false"></textarea></div></template>
   <script src="app.js"></script>
 </body>
 </html>
